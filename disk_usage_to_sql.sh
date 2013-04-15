@@ -123,7 +123,7 @@ build_sql_insert() {
 	    local btime=`build_date $build`
 	    local bsize=`dir_size $build`
 	    local asize=`artif_size $build`
-	    local lsize=`log_size`
+	    local lsize=`log_size $build`
 	    echo `print_build_sql_insert "$job_name" "$build" "$btime" $bsize $asize $lsize`
 	done
     done
