@@ -18,17 +18,20 @@ dir_size() {
 }
 
 build_size() {
-    local bsize=`find $1 -name builds -type d | xargs du -bc | awk '{if($2 == "total") print $1}'`
+    local bsize=`find $1 -name builds -type d | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    if [[  -z $bsize ]]; then local bsize=0; fi
     echo $bsize
 }
 
 artif_size() {
-    local asize=`find $1 -name archive -type d | xargs du -bc | awk '{if($2 == "total") print $1}'`
+    local asize=`find $1 -name archive -type d | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    if [[ -z $asize ]]; then local asize=0; fi
     echo $asize
 }
 
 log_size() {
-    local lsize=`find $1 -name *log | xargs du -bc | awk '{if($2 == "total") print $1}'`
+    local lsize=`find $1 -name *log | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    if [[ -z $lsize ]]; then local lsize=0; fi
     echo $lsize
 }
 
