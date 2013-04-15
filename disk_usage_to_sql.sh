@@ -129,6 +129,23 @@ build_sql_insert() {
 
 #-----===== Main =====-----
 
+check_args() {
+    if [[ !($# -eq 3) ]]; then
+	echo "Expecting 3 argument but $# given."
+	echo `print_usage`
+	exit 1
+    fi
+}
+
+print_help() {
+    echo "Scans Jenkins job directory, count sizes of jobs, builds, artifacts and logs and dump it into SQL insert so it can be imported in database and analyse later on."
+    echo "Usage: disk_usage_to_sql jenkins_job_dir jobs_sql_file builds_sql_file"
+}
+
+print_usage() {
+    echo "Usage: disk_usage_to_sql jenkins_job_dir jobs_sql_file builds_sql_file"
+}
+
 prepare_sql_files() {
     echo "DROP TABLE IF EXISTS jobs;" > $1
     echo "CREATE TABLE jobs(job varchar(256), job_size bigint, builds_size bigint, artif_size bigint, log_size bigint);" >> $1
@@ -137,6 +154,7 @@ prepare_sql_files() {
 }
 
 create_inserts() {
+    check_args $@
     prepare_sql_files $2 $3
     local jobs=`get_jobs $1`
     for job in $jobs; do
