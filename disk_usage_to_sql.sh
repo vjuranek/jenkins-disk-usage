@@ -30,7 +30,7 @@ artif_size() {
 }
 
 log_size() {
-    local lsize=`find $1 -name *log | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    local lsize=`find $1 -name *log -type f | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
     if [[ -z $lsize ]]; then local lsize=0; fi
     echo $lsize
 }
