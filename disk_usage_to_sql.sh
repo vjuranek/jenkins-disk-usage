@@ -1,9 +1,12 @@
 #!/bin/bash 
 
+DELIM="@"
+
 #-----===== General =====-----
 
 get_jobs() {
-    local jobs=`find $1 -mindepth 1 -maxdepth 1 -type d`
+    local jobs=`find $1 -mindepth 1 -maxdepth 1 -type d -printf "%p$DELIM"`
+    #local jobs=`find $1 -mindepth 1 -maxdepth 1 -type d`
     echo $jobs
 }
 
@@ -13,35 +16,37 @@ job_name() {
 }
 
 dir_size() {
-    local dsize=`du -bs $1 | cut -f 1`
+    local dsize=`du -bs "$1" | cut -f 1`
     echo $dsize
 }
 
 build_size() {
-    local bsize=`find $1 -name builds -type d | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    local bsize=`find "$1" -name builds -type d -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
     if [[  -z $bsize ]]; then local bsize=0; fi
     echo $bsize
 }
 
 artif_size() {
-    local asize=`find $1 -name archive -type d | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    local asize=`find "$1" -name archive -type d -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
     if [[ -z $asize ]]; then local asize=0; fi
     echo $asize
 }
 
 log_size() {
-    local lsize=`find $1 -name *log -type f | xargs -r du -bc | awk '{if($2 == "total") print $1}'`
+    local lsize=`find "$1" -name *log -type f -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
     if [[ -z $lsize ]]; then local lsize=0; fi
     echo $lsize
 }
 
 get_build_dirs() {
-    local build_dirs=`find $1 -name builds -type d`
+    local IFS=" "
+    local build_dirs=`find "$1" -name builds -type d -printf "%p$DELIM"`
     echo $build_dirs
 }
 
 get_builds() {
-    local builds=`find $1 -mindepth 1 -maxdepth 1 -type d`
+    local IFS=" "
+    local builds=`find "$1" -mindepth 1 -maxdepth 1 -type d -printf "%p$DELIM"`
     echo $builds
 }
 
@@ -114,11 +119,13 @@ build_sql_insert() {
 	return
     fi
 
+    local IFS=$DELIM
     for build_dir in $build_dirs; do
 	local builds=`get_builds $build_dirs`
 	if [[ -z $builds ]]; then
 	    continue
 	fi
+	local IFS=$DELIM
 	for build in $builds; do
 	    local btime=`build_date $build`
 	    local bsize=`dir_size $build`
@@ -160,7 +167,9 @@ create_inserts() {
     check_args $@
     prepare_sql_files $2 $3
     local jobs=`get_jobs $1`
+    local IFS=$DELIM
     for job in $jobs; do
+	echo $job
 	job_sql_insert $job >> $2
 	build_sql_insert $job >> $3
     done
