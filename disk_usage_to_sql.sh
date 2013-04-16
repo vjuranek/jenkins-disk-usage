@@ -89,13 +89,6 @@ job_sql_insert() {
     echo `print_job_sql_insert $job_name $dsize $bsize $asize $lsize`
 }
 
-list_job_sizes() {
-    local jobs=`get_jobs $1`
-    echo "Jobs: $jobs"
-    for job in $jobs; do
-	do_sizes $job
-    done
-}
 
 #-----===== Builds =====-----
 
