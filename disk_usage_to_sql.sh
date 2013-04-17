@@ -4,6 +4,14 @@ DELIM="@"
 
 #-----===== General =====-----
 
+sum() {
+    local sum
+    for arg in $@; do
+	((sum+=$arg))
+    done
+    echo $sum
+}
+
 get_jobs() {
     local jobs=`find $1 -mindepth 1 -maxdepth 1 -type d -printf "%p$DELIM"`
     #local jobs=`find $1 -mindepth 1 -maxdepth 1 -type d`
@@ -21,19 +29,22 @@ dir_size() {
 }
 
 build_size() {
-    local bsize=`find "$1" -name builds -type d -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local bsizes=`find "$1" -name builds -type d -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local bsize=`sum $bsizes`
     if [[  -z $bsize ]]; then local bsize=0; fi
     echo $bsize
 }
 
 artif_size() {
-    local asize=`find "$1" -name archive -type d -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local asizes=`find "$1" -name archive -type d -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local asize=`sum $asizes`
     if [[ -z $asize ]]; then local asize=0; fi
     echo $asize
 }
 
 log_size() {
-    local lsize=`find "$1" -name *log -type f -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local lsizes=`find "$1" -name *log -type f -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local lsize=`sum $lsizes`
     if [[ -z $lsize ]]; then local lsize=0; fi
     echo $lsize
 }
