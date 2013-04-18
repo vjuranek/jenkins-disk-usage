@@ -1,1 +1,4 @@
 *~
+log/
+sql/builds.sql
+sql/jobs.sql
