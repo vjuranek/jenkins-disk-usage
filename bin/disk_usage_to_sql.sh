@@ -125,7 +125,7 @@ build_sql_insert() {
 
     local IFS=$DELIM
     for build_dir in $build_dirs; do
-	local builds=`get_builds $build_dirs`
+	local builds=`get_builds $build_dir`
 	if [[ -z $builds ]]; then
 	    continue
 	fi
