@@ -43,7 +43,7 @@ artif_size() {
 }
 
 log_size() {
-    local lsizes=`find "$1" -name *log -type f -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
+    local lsizes=`find "$1" -name "*log" -type f -printf "%p$DELIM" | xargs -r -d @ du -bc | awk '{if($2 == "total") print $1}'`
     local lsize=`sum $lsizes`
     if [[ -z $lsize ]]; then local lsize=0; fi
     echo $lsize
