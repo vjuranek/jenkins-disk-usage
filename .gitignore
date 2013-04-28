@@ -1,3 +1,7 @@
 *~
+*.dvi
+*.aux
+*.pdf
 log/
 data/
+tex/*.log
