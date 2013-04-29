@@ -13,4 +13,6 @@ select sum(build_size)/(1024^3) from builds where (time > (current_date - interv
 select sum(log_size)/(1024^3) from builds where (time > (current_date - interval '30 days'));
 select sum(artif_size)/(1024^3) from builds where (time > (current_date - interval '30 days'));
 
+select sum(build_size)/(1024^3), sum(artif_size)/(1024^3), sum(log_size)/(1024^3) from builds;
+
 select sum(job_size) from jobs where job in ('JOB1','JOB2');
