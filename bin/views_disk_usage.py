@@ -17,11 +17,10 @@ for view in views:
         sizes.append((view,size[0],size[1]))
 
 print "------------"
-sizes = sorted(sizes,key = lambda size:size[1])
+sizes = sorted(sizes,key = lambda size:-1*size[1])
 for size in sizes:
     print "View %s has %3.1f GB (%i jobs)"%(size[0],size[1],size[2])
 
 print "------------"
-sizes = sizes.reverse()
 for size in sizes:
     print "%s & %3.1f & %i \\\\"%(size[0],size[1],size[2])
