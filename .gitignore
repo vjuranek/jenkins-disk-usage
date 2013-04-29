@@ -2,6 +2,7 @@
 *.dvi
 *.aux
 *.pdf
+*.pyc
 log/
 data/
 tex/*.log
