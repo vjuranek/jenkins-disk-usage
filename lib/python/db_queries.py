@@ -39,6 +39,10 @@ def balsize_older_than(interval):
     q = "select sum(build_size)/(1024^3), sum(artif_size)/(1024^3) as asize, sum(log_size)/(1024^3) as lsize from builds where (time < (current_date - interval '%i days'));"%interval
     return do_query(q)[0]
 
+def bal_size():
+    q = "select sum(build_size)/(1024^3), sum(artif_size)/(1024^3) as asize, sum(log_size)/(1024^3) as lsize from builds;"
+    return do_query(q)[0]
+
 def size_of_job_set(job_set):
     q_set = ""
     for job in job_set:
